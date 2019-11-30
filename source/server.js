@@ -17,15 +17,15 @@ const debug = dg('server:init');
 const MongoStore = connectMongo(session);
 
 const sessionOptions = {
-    key:               'user',
-    secret:            getPassword(),
-    resave:            false,
-    rolling:           true,
+    key: 'user',
+    secret: getPassword(),
+    resave: false,
+    rolling: true,
     saveUninitialized: false,
-    store:             new MongoStore({ mongooseConnection: mongoose.connection }),
-    cookie:            {
+    store: new MongoStore({ mongooseConnection: mongoose.connection }),
+    cookie: {
         httpOnly: true,
-        maxAge:   15 * 60 * 1000,
+        maxAge: 15 * 60 * 1000,
     },
 };
 
@@ -42,16 +42,19 @@ if (process.env.NODE_ENV === 'production') {
 app.use(
     bodyParser.json({
         limit: '5kb',
-    }),
+    })
 );
 app.use(session(sessionOptions));
 
+app.use('/auth', routers.auth);
+app.use('/staff', routers.staff);
+app.use('/customers', routers.customers);
+app.use('/orders', routers.orders);
+app.use('/products', routers.products);
+
 if (process.env.NODE_ENV === 'development') {
     app.use((req, res, next) => {
-        const body
-            = req.method === 'GET'
-                ? 'Body not supported for GET'
-                : JSON.stringify(req.body, null, 2);
+        const body = req.method === 'GET' ? 'Body not supported for GET' : JSON.stringify(req.body, null, 2);
 
         debug(`${req.method}\n${body}`);
         next();
@@ -59,10 +62,7 @@ if (process.env.NODE_ENV === 'development') {
 }
 
 app.use('*', (req, res, next) => {
-    const error = new NotFoundError(
-        `Can not find right route for method ${req.method} and path ${req.originalUrl}`,
-        404,
-    );
+    const error = new NotFoundError(`Can not find right route for method ${req.method} and path ${req.originalUrl}`, 404);
     next(error);
 });
 
