@@ -16,7 +16,7 @@ extends:
 rules:
     indent: [2, 4, SwitchCase: 1]
     arrow-spacing: [2, { before: true, after: true }]
-    key-spacing: [2, { beforeColon: false, afterColon: true, align: value }]
+    key-spacing: [2, { beforeColon: false, afterColon: true }]
     comma-dangle:
         [
             2,
