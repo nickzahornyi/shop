@@ -11,12 +11,14 @@ parserOptions:
         onlyFilesWithFlowAnnotation: false
 
 extends:
-    - "@lectrum/eslint-config-core"
+    - '@lectrum/eslint-config-core'
 
 rules:
     indent: [2, 4, SwitchCase: 1]
     arrow-spacing: [2, { before: true, after: true }]
     key-spacing: [2, { beforeColon: false, afterColon: true }]
+    array-bracket-spacing: [2, never]
+    operator-linebreak: [0]
     comma-dangle:
         [
             2,
@@ -29,4 +31,12 @@ rules:
             },
         ]
     lines-around-comment:
-        [2, { beforeBlockComment: true, afterBlockComment: false, beforeLineComment: true, afterLineComment: false }]
+        [
+            2,
+            {
+                beforeBlockComment: true,
+                afterBlockComment: false,
+                beforeLineComment: true,
+                afterLineComment: false,
+            },
+        ]

@@ -1,4 +1,3 @@
-// Core
 import express from 'express';
 import session from 'express-session';
 import mongoose from 'mongoose';
@@ -6,10 +5,9 @@ import connectMongo from 'connect-mongo';
 import bodyParser from 'body-parser';
 import dg from 'debug';
 
-// Instruments
 import { getPassword, NotFoundError } from './helpers';
+import * as routers from './routers';
 
-// Initialize DB connection
 import './db';
 
 const app = express();
@@ -42,7 +40,7 @@ if (process.env.NODE_ENV === 'production') {
 app.use(
     bodyParser.json({
         limit: '5kb',
-    })
+    }),
 );
 app.use(session(sessionOptions));
 
@@ -54,7 +52,8 @@ app.use('/products', routers.products);
 
 if (process.env.NODE_ENV === 'development') {
     app.use((req, res, next) => {
-        const body = req.method === 'GET' ? 'Body not supported for GET' : JSON.stringify(req.body, null, 2);
+        const body =
+            req.method === 'GET' ? 'Body not supported for GET' : JSON.stringify(req.body, null, 2);
 
         debug(`${req.method}\n${body}`);
         next();
@@ -62,7 +61,10 @@ if (process.env.NODE_ENV === 'development') {
 }
 
 app.use('*', (req, res, next) => {
-    const error = new NotFoundError(`Can not find right route for method ${req.method} and path ${req.originalUrl}`, 404);
+    const error = new NotFoundError(
+        `Can not find right route for method ${req.method} and path ${req.originalUrl}`,
+        404,
+    );
     next(error);
 });
 
