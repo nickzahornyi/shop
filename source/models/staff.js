@@ -9,8 +9,15 @@ export class StaffModel {
 
     async login() {
         const { email, password } = this.data;
+
+        const res = await staff.findOne({ 'emails.email': email });
+
+        if (res === null) {
+            return null;
+        }
+
         const { hash, password: userPassword } = await staff
-            .findOne({ email })
+            .findOne({ 'emails.email': email })
             .select('password hash')
             .lean();
 

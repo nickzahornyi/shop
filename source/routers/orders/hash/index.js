@@ -24,7 +24,7 @@ export const updateByHash = async (req, res) => {
     }
 };
 
-export const removeByHash = async (req, res) => {
+export const deleteByHash = async (req, res) => {
     try {
         const { hash } = req.params;
         const model = new OrdersController({ hash });

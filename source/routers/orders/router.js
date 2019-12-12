@@ -1,7 +1,7 @@
 import express from 'express';
 
-import { get, post } from './route';
-import { getByHash, updateByHash, removeByHash } from './hash/route';
+import { get, post } from './index';
+import { getByHash, updateByHash, deleteByHash } from './hash';
 import { limiter, validator, authenticate } from '../../helpers';
 
 import { order } from '../../schemas';
@@ -13,6 +13,6 @@ router.post('/', [validator(order)], post);
 
 router.get('/:hash', [authenticate], getByHash);
 router.put('/:hash', [authenticate, validator(order)], updateByHash);
-router.delete('/:hash', [authenticate], removeByHash);
+router.delete('/:hash', [authenticate], deleteByHash);
 
 export { router as orders };

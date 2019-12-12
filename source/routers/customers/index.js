@@ -1,3 +1,4 @@
+import bcrypt from 'bcrypt';
 import { CustomersController } from '../../controllers';
 
 export const get = async (req, res) => {
@@ -14,7 +15,9 @@ export const get = async (req, res) => {
 
 export const post = async (req, res) => {
     try {
-        const model = new CustomersController(req.body);
+        const body = req.body;
+        body.password = await bcrypt.hash(body.password, 11);
+        const model = new CustomersController(body);
         const data = await model.create();
 
         res.status(201).json({ data });

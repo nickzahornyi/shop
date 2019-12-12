@@ -1,4 +1,4 @@
-import { StaffController } from '../../controllers';
+import { StaffController, CustomersController } from '../../controllers';
 
 export const login = async (req, res) => {
     try {
@@ -12,9 +12,16 @@ export const login = async (req, res) => {
             .split(':');
 
         const staff = new StaffController({ email, password });
-        const hash = await staff.login();
+        let hash = await staff.login();
+        let userType = 'staff';
 
-        req.session.user = { hash };
+        if (!hash) {
+            const customer = new CustomersController({ email, password });
+            hash = await customer.login();
+            userType = 'customer';
+        }
+
+        req.session.user = { hash, type: userType };
         res.sendStatus(204);
     } catch (error) {
         res.status(401).json({ message: error.message });

@@ -7,6 +7,12 @@ export class CustomersController {
         };
     }
 
+    async login() {
+        const data = await this.models.customers.login();
+
+        return data;
+    }
+
     async create() {
         const data = await this.models.customers.create();
 

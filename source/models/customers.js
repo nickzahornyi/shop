@@ -1,9 +1,34 @@
+import bcrypt from 'bcrypt';
+
 import { customers } from '../odm';
 import { NotFoundError } from '../helpers';
 
 export class CustomersModel {
     constructor(data) {
         this.data = data;
+    }
+
+    async login() {
+        const { email, password } = this.data;
+
+        const res = await customers.findOne({ 'emails.email': email });
+
+        if (res === null) {
+            return null;
+        }
+
+        const { hash, password: userPassword } = await customers
+            .findOne({ 'emails.email': email })
+            .select('password hash')
+            .lean();
+
+        const match = await bcrypt.compare(password, userPassword);
+
+        if (!match) {
+            throw new Error('Credentials are not valid');
+        }
+
+        return hash;
     }
 
     async create() {
